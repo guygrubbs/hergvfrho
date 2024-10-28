@@ -16,7 +16,7 @@ const formVariants = cva('space-y-6', {
   },
 });
 
-const Form = React.forwardRef(({ children, className, onSubmit, size, ...props }, ref) => (
+export const Form = React.forwardRef(({ children, className, onSubmit, size, ...props }, ref) => (
   <form
     ref={ref}
     onSubmit={onSubmit}
@@ -29,7 +29,7 @@ const Form = React.forwardRef(({ children, className, onSubmit, size, ...props }
 
 Form.displayName = 'Form';
 
-const FormField = ({ label, error, children }) => (
+export const FormField = ({ label, error, children }) => (
   <div className="form-field space-y-2">
     {label && <label className="block text-sm font-medium">{label}</label>}
     {children}
@@ -37,7 +37,7 @@ const FormField = ({ label, error, children }) => (
   </div>
 );
 
-const FormInput = React.forwardRef(({ label, error, ...props }, ref) => (
+export const FormInput = React.forwardRef(({ label, error, ...props }, ref) => (
   <FormField label={label} error={error}>
     <Input ref={ref} {...props} />
   </FormField>
@@ -45,4 +45,7 @@ const FormInput = React.forwardRef(({ label, error, ...props }, ref) => (
 
 FormInput.displayName = 'FormInput';
 
-export { Form, FormInput, AppToaster };
+export const FormItem = ({ children }) => <div>{children}</div>;
+export const FormLabel = ({ children }) => <label>{children}</label>;
+export const FormControl = ({ children }) => <div>{children}</div>;
+export const FormMessage = () => <p className="form-message">Message</p>;
