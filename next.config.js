@@ -6,14 +6,8 @@ const nextConfig = {
   // Image configuration
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'api.placeholder.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
+      { protocol: 'https', hostname: 'api.placeholder.com' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
@@ -51,7 +45,8 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; " +
               "img-src 'self' data: https: blob:; media-src 'self'; connect-src 'self' https://api.vcplatform.com; frame-src 'self'",
           },
@@ -68,7 +63,7 @@ const nextConfig = {
     ];
   },
 
-  // Webpack configuration with improvements for build issues
+  // Webpack configuration with improved caching control
   webpack: (config, { dev, isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -77,15 +72,11 @@ const nextConfig = {
 
     config.module.rules.push({
       test: /\.pdf$/,
-      use: [
-        {
-          loader: 'file-loader',
-          options: { name: '[name].[ext]' },
-        },
-      ],
+      use: [{ loader: 'file-loader', options: { name: '[name].[ext]' } }],
     });
 
     if (!dev && !isServer) {
+      // Enhanced chunk splitting for production builds
       config.optimization.splitChunks = {
         chunks: 'all',
         minSize: 20000,
@@ -108,8 +99,8 @@ const nextConfig = {
       };
     }
 
-    // Adjusted cache settings
-    config.cache = { type: 'filesystem', cacheDirectory: `${process.cwd()}/.next/cache` };
+    // Cache configuration updated to resolve build warnings
+    config.cache = false; // Disable caching if necessary
 
     return config;
   },
@@ -120,11 +111,9 @@ const nextConfig = {
     defaultLocale: 'en',
   },
 
-  // Experimental features adjusted
+  // Experimental features with safe CSS optimization
   experimental: {
-    optimizeCss: {
-      critters: { ssrMode: 'opt-in' },
-    },
+    optimizeCss: { critters: { ssrMode: 'opt-in' } },
   },
 
   poweredByHeader: false, // Disable 'X-Powered-By' header
