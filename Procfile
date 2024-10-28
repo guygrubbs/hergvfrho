@@ -1,5 +1,5 @@
 # Web process for serving the Next.js application
-web: npm run build && npm run start
+web: npm run build && ls -al .next && npm run start
 
 # Release phase for database migrations and build steps
 release: npx prisma migrate deploy && npm run build
