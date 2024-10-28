@@ -4,7 +4,7 @@
   "private": true,
   "description": "A modern platform for startups to submit pitch decks and connect with investors",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=18.0.0 <25.0.0",
     "npm": ">=9.0.0"
   },
   "scripts": {
@@ -14,7 +14,8 @@
     "start": "next start -p $PORT",
     "postinstall": "prisma generate && npm run build",
     "heroku-postbuild": "npm run build",
-    "migrate": "prisma migrate deploy"
+    "migrate": "prisma migrate deploy",
+    "lint": "next lint"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
@@ -59,7 +60,6 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-	"typescript": "^5.2.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -76,7 +76,9 @@
     "postcss-preset-env": "^9.6.0",
     "prisma": "^5.21.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "eslint": "^8.50.0",
+    "eslint-config-next": "^14.1.0"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

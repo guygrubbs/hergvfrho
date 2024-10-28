@@ -20,7 +20,7 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
 
-  // Environment variables that should be exposed to the browser
+  // Environment variables exposed to the browser
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_COMPANY_NAME: 'VC Platform',
@@ -37,7 +37,7 @@ const nextConfig = {
     JWT_SECRET: process.env.JWT_SECRET,
   },
 
-  // Headers configuration for security
+  // Security headers configuration
   async headers() {
     return [
       {
@@ -51,8 +51,7 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
           {
             key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; " +
               "img-src 'self' data: https: blob:; media-src 'self'; connect-src 'self' https://api.vcplatform.com; frame-src 'self'",
           },
@@ -69,7 +68,7 @@ const nextConfig = {
     ];
   },
 
-  // Webpack configuration
+  // Webpack configuration with improvements for build issues
   webpack: (config, { dev, isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -87,34 +86,30 @@ const nextConfig = {
     });
 
     if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          minSize: 20000,
-          maxSize: 244000,
-          minChunks: 1,
-          maxAsyncRequests: 30,
-          maxInitialRequests: 30,
-          cacheGroups: {
-            defaultVendors: {
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              reuseExistingChunk: true,
-            },
-            default: {
-              minChunks: 2,
-              priority: -20,
-              reuseExistingChunk: true,
-            },
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        cacheGroups: {
+          defaultVendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            reuseExistingChunk: true,
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
           },
         },
       };
     }
 
-    // Enable experimental caching to improve build speed
-    config.experiments = { cacheUnaffected: true };
-    config.cache = { type: 'filesystem', cacheDirectory: '.next/cache' };
+    // Adjusted cache settings
+    config.cache = { type: 'filesystem', cacheDirectory: `${process.cwd()}/.next/cache` };
 
     return config;
   },
@@ -125,16 +120,16 @@ const nextConfig = {
     defaultLocale: 'en',
   },
 
+  // Experimental features adjusted
   experimental: {
     optimizeCss: {
       critters: { ssrMode: 'opt-in' },
     },
-    outputFileTracing: true,
   },
 
-  poweredByHeader: false, // Disable 'X-Powered-By' header for security
+  poweredByHeader: false, // Disable 'X-Powered-By' header
 
-  output: 'standalone', // Optimize build for deployment
+  output: 'standalone', // Optimized for deployment
 };
 
 module.exports = nextConfig;
