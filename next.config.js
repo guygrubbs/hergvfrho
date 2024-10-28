@@ -2,24 +2,24 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  
+
   // Image configuration
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'api.placeholder.com'
+        hostname: 'api.placeholder.com',
       },
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com'
-      }
+        hostname: 'res.cloudinary.com',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
-  
+
   // Environment variables that should be exposed to the browser
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
@@ -34,86 +34,58 @@ const nextConfig = {
     EMAIL_USERNAME: process.env.EMAIL_USERNAME,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     UPLOAD_FOLDER_ID: process.env.UPLOAD_FOLDER_ID,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
   },
-  
+
   // Headers configuration for security
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; media-src 'self'; connect-src 'self' https://api.vcplatform.com; frame-src 'self'"
-          }
-        ]
-      }
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; " +
+              "img-src 'self' data: https: blob:; media-src 'self'; connect-src 'self' https://api.vcplatform.com; frame-src 'self'",
+          },
+        ],
+      },
     ];
   },
 
   // Redirects configuration
   async redirects() {
     return [
-      {
-        source: '/pitch',
-        destination: '/submit',
-        permanent: true,
-      },
-      {
-        source: '/apply',
-        destination: '/submit',
-        permanent: true,
-      }
+      { source: '/pitch', destination: '/submit', permanent: true },
+      { source: '/apply', destination: '/submit', permanent: true },
     ];
   },
-  
+
   // Webpack configuration
   webpack: (config, { dev, isServer }) => {
-    // SVG handling
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack']
+      use: ['@svgr/webpack'],
     });
 
-    // PDF handling
     config.module.rules.push({
       test: /\.pdf$/,
       use: [
         {
           loader: 'file-loader',
-          options: {
-            name: '[name].[ext]'
-          }
-        }
-      ]
+          options: { name: '[name].[ext]' },
+        },
+      ],
     });
 
-    // Optimization for production builds
     if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
@@ -134,34 +106,35 @@ const nextConfig = {
               minChunks: 2,
               priority: -20,
               reuseExistingChunk: true,
-            }
-          }
-        }
+            },
+          },
+        },
       };
     }
 
+    // Enable experimental caching to improve build speed
+    config.experiments = { cacheUnaffected: true };
+    config.cache = { type: 'filesystem', cacheDirectory: '.next/cache' };
+
     return config;
   },
-  
+
   // Internationalization settings
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
   },
-  
-    experimental: {
+
+  experimental: {
     optimizeCss: {
-      critters: {
-        ssrMode: 'opt-in'
-      }
-    }
+      critters: { ssrMode: 'opt-in' },
+    },
+    outputFileTracing: true,
   },
 
-  // Disable powered by header
-  poweredByHeader: false,
+  poweredByHeader: false, // Disable 'X-Powered-By' header for security
 
-  // Configure build output
-  output: 'standalone',
+  output: 'standalone', // Optimize build for deployment
 };
 
 module.exports = nextConfig;
