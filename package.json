@@ -12,7 +12,7 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "heroku-postbuild": "npm run build",
-    "postinstall": "prisma generate"
+	"postinstall": "prisma generate && cp prisma/dev.db ."
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
