@@ -11,8 +11,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
+    "postinstall": "prisma generate && npm run build",
     "heroku-postbuild": "npm run build",
-    "postinstall": "prisma generate && cp prisma/dev.db . && next build"
+    "migrate": "prisma migrate deploy"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
