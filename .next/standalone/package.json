@@ -11,9 +11,9 @@
   },
   "scripts": {
     "clean": "rm -rf .next",
-    "dev": "next dev",
+    "dev": "cross-env PORT=3000 next dev",
     "build": "next build",
-    "start": "cross-env PORT=3000 \"C:\\Program Files\\nodejs\\node.exe\" -e \"console.log('Port:', process.env.PORT)\" && node -r dotenv/config ./node_modules/next/dist/bin/next start -p %PORT%",
+    "start": "cross-env PORT=3000 node -r dotenv/config ./node_modules/next/dist/bin/next start -p %PORT%",
     "postinstall": "prisma generate && npm run build",
     "heroku-postbuild": "npm run build",
     "migrate": "prisma migrate deploy",

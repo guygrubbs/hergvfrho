@@ -9,7 +9,7 @@ const ToastContext = createContext();
 
 export const useToast = () => useContext(ToastContext);
 
-const Toaster = ({ className, ...props }) => {
+const Toaster = ({ className, toastOptions, ...props }) => { // Changed: Handling toastOptions
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((toast) => {
@@ -23,10 +23,10 @@ const Toaster = ({ className, ...props }) => {
   return (
     <ToastContext.Provider value={{ toast: addToast }}>
       <Toast.Provider swipeDirection="right">
-        <div className={cn("toaster group", className)} {...props}>
+        <div className={cn("toaster group", className)} {...props}> 
           <Toast.Viewport className="toast-viewport" />
           {toasts.map(({ id, title, description, variant = 'default' }) => (
-            <Toast.Root key={id} className={cn(toastVariants[variant])}>
+            <Toast.Root key={id} className={cn(toastVariants[variant])} {...toastOptions}> {/* Corrected usage */}
               <Toast.Title>{title}</Toast.Title>
               <Toast.Description>{description}</Toast.Description>
               <Toast.Close onClick={() => removeToast(id)}>Close</Toast.Close>
