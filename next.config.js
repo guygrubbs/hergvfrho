@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
 
-  // Image configuration
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'api.placeholder.com' },
@@ -14,7 +15,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
 
-  // Environment variables exposed to the browser
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_COMPANY_NAME: 'VC Platform',
@@ -31,7 +31,6 @@ const nextConfig = {
     JWT_SECRET: process.env.JWT_SECRET,
   },
 
-  // Security headers configuration
   async headers() {
     return [
       {
@@ -45,8 +44,7 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
           {
             key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " +
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; " +
               "img-src 'self' data: https: blob:; media-src 'self'; connect-src 'self' https://api.vcplatform.com; frame-src 'self'",
           },
@@ -55,7 +53,6 @@ const nextConfig = {
     ];
   },
 
-  // Redirects configuration
   async redirects() {
     return [
       { source: '/pitch', destination: '/submit', permanent: true },
@@ -63,7 +60,6 @@ const nextConfig = {
     ];
   },
 
-  // Webpack configuration with improved caching control
   webpack: (config, { dev, isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -76,7 +72,6 @@ const nextConfig = {
     });
 
     if (!dev && !isServer) {
-      // Enhanced chunk splitting for production builds
       config.optimization.splitChunks = {
         chunks: 'all',
         minSize: 20000,
@@ -99,26 +94,26 @@ const nextConfig = {
       };
     }
 
-    // Cache configuration updated to resolve build warnings
-    config.cache = false; // Disable caching if necessary
+    // Update cache directory path to absolute
+    config.cache = {
+      type: 'filesystem',
+      cacheDirectory: path.resolve(__dirname, '.next/cache'), // Absolute path
+    };
 
     return config;
   },
 
-  // Internationalization settings
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
   },
 
-  // Experimental features with safe CSS optimization
   experimental: {
     optimizeCss: { critters: { ssrMode: 'opt-in' } },
   },
 
-  poweredByHeader: false, // Disable 'X-Powered-By' header
-
-  output: 'standalone', // Optimized for deployment
+  poweredByHeader: false,
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
