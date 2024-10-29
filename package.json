@@ -18,7 +18,7 @@
     "heroku-postbuild": "npm run build",
     "migrate": "prisma migrate deploy",
     "lint": "next lint"
-  }
+  },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
     "@hookform/resolvers": "^3.3.4",
