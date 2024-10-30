@@ -1,3 +1,5 @@
+'use client'
+
 // components/Features.js
 import React from 'react';
 import { motion } from 'framer-motion';

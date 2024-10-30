@@ -1,3 +1,5 @@
+'use client'
+
 // pages/how-it-works.js
 import Head from 'next/head';
 import Link from 'next/link';

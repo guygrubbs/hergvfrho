@@ -13,7 +13,7 @@
     "clean": "rimraf .next",
     "dev": "cross-env PORT=3000 next dev",
     "build": "next build",
-    "start": "node server.js",
+    "start": "node .next/standalone/server.js",
     "postinstall": "prisma generate && npm run build",
     "heroku-postbuild": "npm run build",
     "migrate": "prisma migrate deploy",

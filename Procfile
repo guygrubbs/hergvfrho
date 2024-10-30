@@ -1,5 +1,6 @@
 # Web process for serving the Next.js application
-web: node .next/standalone/server.js
+web: npm run dev
+#web: node .next/standalone/server.js
 
 # Release phase for database migrations and build steps
 release: npx prisma migrate deploy && npm run build
